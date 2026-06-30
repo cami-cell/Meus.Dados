@@ -1,0 +1,36 @@
+CREATE DATABASE ControleLoja;
+USE ControleLoja;
+
+CREATE TABLE CLIENTES (
+    id_cliente INT NOT NULL AUTO_INCREMENT,
+    nome VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL,
+    data_cadastro DATE NOT NULL,
+    PRIMARY KEY (id_cliente)
+);
+
+INSERT INTO CLIENTES (nome, email, data_cadastro) VALUES 
+('Carlos Silva', 'carlos@email.com', '2026-06-29'),
+('Ana Souza', 'ana@email.com', '2026-06-30'),
+('Marcos Roberto', 'marcos@email.com', '2026-06-30'),
+('Juliana Lima', 'juliana@email.com', '2026-06-30'),
+('Lucas Oliveira', 'lucas@email.com', '2026-07-01');
+
+DELIMITER $$
+
+CREATE FUNCTION Fn_TotalClientesPorDia (data_pesquisa DATE)
+RETURNS INT
+DETERMINISTIC
+BEGIN
+    DECLARE total_cadastros INT;
+
+    SELECT COUNT(*) INTO total_cadastros
+    FROM CLIENTES
+    WHERE data_cadastro = data_pesquisa;
+
+    RETURN total_cadastros;
+END$$
+
+DELIMITER ;
+
+SELECT Fn_TotalClientesPorDia('2026-06-30') AS 'Clientes Cadastrados no Dia';
